@@ -1,0 +1,17 @@
+{
+  "common": {
+    "primaryColor": "#35D5CB",
+    "primaryColorHover": "#49FFF4",
+    "primaryColorPressed": "#25A9A1",
+    "primaryColorSuppl": "#49FFF4",
+    "textColorBase": "#414141"
+  },
+  "Button": {
+    "colorQuaternaryHover": "rgba(46, 51, 56, 0.04)",
+    "colorQuaternaryPressed": "rgba(46, 51, 56, 0)",
+    "colorQuaternaryFocus": "rgba(46, 51, 56, 0)"
+  },
+  "Form": {
+    "asteriskColor": "#35D5CB"
+  }
+}

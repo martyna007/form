@@ -6,8 +6,8 @@ import Profile from './pages/Profile.vue'
 import App from './App.vue'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', component: Home },
-  { path: '/profile', component: Profile },
+  { path: '/', component: Home, name: 'Home' },
+  { path: '/profile', component: Profile, name: 'Profile' },
 ]
 
 const router: Router = createRouter({
