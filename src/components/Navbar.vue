@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
-    <span class="navbar--logo" @click="redirectTo('Home')" @mouseenter="rotate()" @mouseleave="rotateBack()">
-      <img ref="logoEl" width="60" height="60" :src="Logo" alt="ArcticForm logo">
+    <span class="navbar--logo" @click="redirectTo('Form')" @mouseenter="rotate()" @mouseleave="rotateBack()">
+      <img ref="logoEl" width="60" height="60" src="../assets/logo.svg" alt="ArcticForm logo">
       <n-h1 prefix="bar">
       <n-text>
         ArcticForm
@@ -10,24 +10,24 @@
     </span>
     <span>
       <template v-for="routeLink of allRoutes">
-        <n-button class="navbar--link" @click="redirectTo(routeLink.name)" attr-type="button" quaternary size="large" :color="active === routeLink.name ? '#35D5CB' : ''">{{ routeLink.name }}</n-button>
+        <n-button class="navbar--link" @click="redirectTo(routeLink.name)" attr-type="button" quaternary size="large" :color="currentRoute === routeLink.name ? '#2bb1a8' : ''">{{ routeLink.name }}</n-button>
       </template>
     </span>
   </div>
 </template>
 <script setup lang="ts">
-import Logo from '../assets/logo.svg'
 import {NButton, NH1, NText} from 'naive-ui'
-import {useRouter, RouteRecord} from 'vue-router'
-import {ref} from 'vue'
+import {useRouter, RouteRecord, RouteRecordName} from 'vue-router'
+import {computed, ref} from 'vue'
 
 const router = useRouter()
 const allRoutes: RouteRecord[] = router.getRoutes()
-const active = ref<string | symbol>('Home')
 const logoEl = ref<HTMLElement | null>(null)
+const currentRoute = computed(() => {
+  return useRouter().currentRoute.value.name;
+})
 
-function redirectTo(routeName: string | symbol): void {
-  active.value = routeName
+function redirectTo(routeName: RouteRecordName | undefined): void {
   router.push({
     name: routeName,
   })
