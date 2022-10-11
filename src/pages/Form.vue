@@ -16,20 +16,20 @@
         inline
     >
       <n-grid cols="6 m:24" responsive="screen" x-gap="24">
-        <n-form-item-gi :span="12" label="First name" path="firstname">
+        <n-form-item-gi class="mt-1" :span="12" label="First name" path="firstname">
           <n-input v-model:value="formValue.firstname" clearable placeholder="Input first name"/>
         </n-form-item-gi>
-        <n-form-item-gi :span="12" label="Last name" path="lastname">
+        <n-form-item-gi class="mt-1" :span="12" label="Last name" path="lastname">
           <n-input v-model:value="formValue.lastname" clearable placeholder="Input last name"/>
         </n-form-item-gi>
-        <n-form-item-gi :span="12" label="E-mail" path="email">
+        <n-form-item-gi class="mt-1" :span="12" label="E-mail" path="email">
           <n-input v-model:value="formValue.email" clearable placeholder="Input email"/>
         </n-form-item-gi>
-        <n-form-item-gi :span="12" label="Birthday" path="birthday">
+        <n-form-item-gi class="mt-1" :span="12" label="Birthday" path="birthday">
           <n-date-picker v-model:value="formValue.birthday" v-model:formatted-value="formValue.birthdayFormatted" :actions="null" clearable placeholder="Date of birth"
                          type="date" value-format="yyyy-MM-dd" class="w-100"/>
         </n-form-item-gi>
-        <n-form-item-gi :span="12" label="Avatar" path="img">
+        <n-form-item-gi class="mt-1" :span="12" label="Avatar" path="img">
           <n-upload
               accept="image/png, image/jpg, image/jpeg"
               @before-upload="beforeUpload"
@@ -38,7 +38,7 @@
             <span class="small">Accepted formats: png, jpg and jpeg. Max size: 2MB</span>
           </n-upload>
         </n-form-item-gi>
-        <n-form-item-gi :span="12" label="Phone" path="phone">
+        <n-form-item-gi class="mt-1" :span="12" label="Phone" path="phone">
           <n-input v-model:value="formValue.phone" clearable placeholder="Input phone number"/>
         </n-form-item-gi>
         <n-form-item-gi :span="24" label="About" path="about">

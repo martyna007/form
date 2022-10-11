@@ -12,7 +12,7 @@
       <n-h4 class="mt-0 mb-4 text-center">Your profile information:</n-h4>
       <n-grid cols="6 s:24" responsive="screen" x-gap="6">
         <n-gi :span="12" class="d-flex justify-content-center align-items-center">
-          <img class="rounded-circle" width="160" height="160" :src="userData.img === undefined ? '/src/assets/blank.webp' : userData.img" alt="user's avatar">
+          <img class="rounded-circle" width="160" height="160" :src="userData.img === undefined ? BlankImg : userData.img" alt="user's avatar">
         </n-gi>
         <n-gi :span="12" class="d-flex justify-content-center align-items-start flex-column mx-3">
           <span class="d-flex align-items-center mb-2">
@@ -80,6 +80,7 @@ import SessionStorageService from '../services/SessionStorageService'
 import {UserData} from '../types'
 import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
+import BlankImg from './../assets/blank.webp'
 
 const router = useRouter()
 const userData = ref<UserData | null>(null)
