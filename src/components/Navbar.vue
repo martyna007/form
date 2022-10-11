@@ -1,16 +1,16 @@
 <template>
-  <div class="navbar">
-    <span class="navbar--logo" @click="redirectTo('Form')" @mouseenter="rotate()" @mouseleave="rotateBack()">
+  <div class="d-flex align-items-center justify-content-between py-1 px-3 py-sm-3 px-sm-4">
+    <span class="d-flex align-items-center cursor-pointer" @click="redirectTo('Form')" @mouseenter="rotate()" @mouseleave="rotateBack()">
       <img ref="logoEl" width="60" height="60" src="../assets/logo.svg" alt="ArcticForm logo">
-      <n-h1 prefix="bar">
-      <n-text>
+      <n-h1 prefix="bar" class="m-0 ms-2">
+      <n-text class="d-none d-sm-block">
         ArcticForm
       </n-text>
     </n-h1>
     </span>
     <span>
       <template v-for="routeLink of allRoutes">
-        <n-button class="navbar--link" @click="redirectTo(routeLink.name)" attr-type="button" quaternary size="large" :color="currentRoute === routeLink.name ? '#2bb1a8' : ''">{{ routeLink.name }}</n-button>
+        <n-button @click="redirectTo(routeLink.name)" attr-type="button" quaternary size="large" :class="currentRoute === routeLink.name ? 'text-primary' : ''">{{ routeLink.name }}</n-button>
       </template>
     </span>
   </div>
@@ -24,12 +24,12 @@ const router = useRouter()
 const allRoutes: RouteRecord[] = router.getRoutes()
 const logoEl = ref<HTMLElement | null>(null)
 const currentRoute = computed(() => {
-  return useRouter().currentRoute.value.name;
+  return useRouter().currentRoute.value.name
 })
 
 function redirectTo(routeName: RouteRecordName | undefined): void {
   router.push({
-    name: routeName,
+    name: routeName
   })
 }
 function rotate(): void {
@@ -42,35 +42,12 @@ function rotateBack(): void {
 }
 </script>
 <style scoped>
-  .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 50px;
-  }
-  .navbar--logo {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  .navbar--link {
-    margin: 0 2px;
-  }
-  h1 {
-    margin: 0 0 0 10px;
-  }
-  .navbar--logo img {
+  img {
     transition: transform .3s ease-in-out;
   }
-  @media (max-width: 600px) {
-    .navbar {
-      padding: 5px 20px;
-    }
-    .navbar--logo img {
+  @media (max-width: 575px) {
+    img {
       width: 30px;
-    }
-    .n-text {
-      display: none;
     }
   }
 </style>

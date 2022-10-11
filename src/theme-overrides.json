@@ -1,5 +1,8 @@
 {
   "common": {
+    "fontFamily": "Open Sans",
+    "fontWeight": "400",
+    "fontWeightStrong": "600",
     "primaryColor": "#2bb1a8",
     "primaryColorHover": "#34e1d5",
     "primaryColorPressed": "#25A9A1",

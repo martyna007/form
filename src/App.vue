@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider class="container--app" :theme-overrides="themeStyles">
+  <n-config-provider class="h-100 d-flex flex-column" :theme-overrides="themeStyles">
     <n-message-provider>
       <BaseLayout>
         <router-view></router-view>

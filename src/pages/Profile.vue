@@ -1,59 +1,60 @@
 <template>
-  <n-card :bordered="false" style="max-width: 600px;box-shadow: 0 0 14px rgb(0 0 0 / 20%);margin: 0 auto;">
+  <n-card :bordered="false" class="mx-auto my-0 shadow">
     <template v-if="!isUserData">
-      <n-h2 style="margin: 0;text-align: center; color: #2bb1a8">Please fill the form first ;)</n-h2>
-      <n-h4 style="margin: 0 0 30px 0;text-align: center">Click below to redirect</n-h4>
-      <div style="display: flex; justify-content: center">
+      <n-h2 class="m-0 text-center text-primary">Please fill the form first ;)</n-h2>
+      <n-h4 class="mt-0 mb-4 text-center">Click below to redirect</n-h4>
+      <div class="d-flex justify-content-center">
         <n-button @click="redirectToForm" type="primary">Go to form</n-button>
       </div>
     </template>
     <template v-else-if="userData !== null">
-      <n-h2 style="margin: 0;text-align: center; color: #2bb1a8">Thank You!</n-h2>
-      <n-h4 style="margin: 0 0 30px 0;text-align: center">Your profile information:</n-h4>
+      <n-h2 class="m-0 text-center text-primary">Thank You!</n-h2>
+      <n-h4 class="mt-0 mb-4 text-center">Your profile information:</n-h4>
       <n-grid cols="6 s:24" responsive="screen" x-gap="6">
-        <n-gi :span="12" style="display: flex;justify-content: center; align-items: center;">
-          <img width="160" src="{{userData.img === undefined ? '/src/assets/blank.webp' : userData.img}}" alt="user's avatar">
+        <n-gi :span="12" class="d-flex justify-content-center align-items-center">
+          <img class="rounded-circle" width="160" height="160" :src="userData.img === undefined ? '/src/assets/blank.webp' : userData.img" alt="user's avatar">
         </n-gi>
-        <n-gi :span="12" style="display: flex;justify-content: center; align-items: flex-start; flex-direction: column; margin: 0 20px;">
-          <span style="display: flex; align-items: center; margin-bottom: 10px;">
-            <Icon size="18" tag="i" color="#b9b9b9" style="margin: 0 8px;">
+        <n-gi :span="12" class="d-flex justify-content-center align-items-start flex-column mx-3">
+          <span class="d-flex align-items-center mb-2">
+            <Icon size="18" tag="i" color="#b9b9b9" class="mx-2">
             <PersonFilled/>
             </Icon>
             {{ userData.firstname }} {{ userData.lastname }}
           </span>
-          <span style="display: flex; align-items: center; margin-bottom: 10px;">
-            <Icon size="18" tag="i" color="#b9b9b9" style="margin: 0 8px;">
+          <span class="d-flex align-items-center mb-2">
+            <Icon size="18" tag="i" color="#b9b9b9" class="mx-2">
               <AlternateEmailFilled/>
             </Icon>
-            <a :href="'mailto:' + userData.email">{{ userData.email }}</a>
+            <a class="text-primary" :href="'mailto:' + userData.email">{{ userData.email }}</a>
           </span>
-          <span style="display: flex; align-items: center; margin-bottom: 10px;">
-            <Icon size="18" tag="i" color="#b9b9b9" style="margin: 0 8px;">
+          <span class="d-flex align-items-center mb-2">
+            <Icon size="18" tag="i" color="#b9b9b9" class="mx-2">
               <LocalPhoneOutlined/>
             </Icon>
             <template v-if="userData.phone === null">
               -
             </template>
-            <a v-else :href="'tel:' + userData.phone">{{ userData.phone }}</a>
+            <a class="text-primary" v-else :href="'tel:' + userData.phone">{{ userData.phone }}</a>
           </span>
-          <span style="display: flex; align-items: center; margin-bottom: 10px;">
-          <Icon size="18" tag="i" color="#b9b9b9" style="margin: 0 8px;">
+          <span class="d-flex align-items-center mb-2">
+          <Icon size="18" tag="i" color="#b9b9b9" class="mx-2">
             <DateRangeFilled/>
           </Icon>
           {{ userData.birthdayFormatted }}
           </span>
         </n-gi>
       </n-grid>
-        <n-grid cols="6 m:24" responsive="screen" x-gap="6" style="margin-top:20px;">
-          <n-gi :span="24" style="padding: 20px;">
+        <n-grid cols="6 m:24" responsive="screen" x-gap="6" class="mt-4">
+          <n-gi :span="24" class="px-3">
             {{ userData.about }}
           </n-gi>
           <n-gi :span="24">
-            <div style="display: flex; justify-content: space-between">
-              <n-button type="primary"  @click="redirectToForm">
+            <n-divider class="mb-3 mt-4"/>
+            <div class="d-flex justify-content-center justify-content-sm-between flex-wrap">
+              <n-button class="m-1" type="primary" @click="redirectToForm">
                 Edit your profile data
               </n-button>
-              <n-button type="tertiary"  @click="clearSessionStorage">
+              <n-button class="m-1" type="tertiary" @click="clearSessionStorage">
                 Clear session storage
               </n-button>
             </div>
@@ -72,7 +73,8 @@ import {
   NGi,
   NH4,
   NH2,
-  NButton
+  NButton,
+  NDivider
 } from 'naive-ui'
 import SessionStorageService from '../services/SessionStorageService'
 import {UserData} from '../types'
@@ -83,7 +85,7 @@ const router = useRouter()
 const userData = ref<UserData | null>(null)
 const isUserData = ref<boolean>(false)
 
-onMounted(()=> {
+onMounted((): void => {
   userData.value = SessionStorageService.getInstance().getUserData()
   isUserData.value = SessionStorageService.getInstance().isUserData()
 })
@@ -100,10 +102,13 @@ function clearSessionStorage(): void {
 </script>
 
 <style scoped>
+.n-card {
+  max-width: 600px;
+}
 .n-card > .n-card-header {
   padding-bottom: 0;
 }
-a {
-  color: #2bb1a8;
+img {
+  object-fit: cover;
 }
 </style>

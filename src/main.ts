@@ -3,16 +3,16 @@ import {createRouter, createWebHashHistory, Router, RouteRecordRaw} from 'vue-ro
 import Form from './pages/Form.vue'
 import Profile from './pages/Profile.vue'
 import App from './App.vue'
-import './style.css'
+import './styles/main.css'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: Form, name: 'Form' },
-  { path: '/profile', component: Profile, name: 'Profile' },
+  { path: '/profile', component: Profile, name: 'Profile' }
 ]
 
 const router: Router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes
 })
 
 const app = createApp(App)

@@ -1,5 +1,5 @@
 <template>
-  <span class="footer">
+  <span class="d-flex align-items-center justify-content-center p-2">
     All rights reserved &copy; {{ currentYear }}</span>
 </template>
 
@@ -8,15 +8,8 @@ const currentYear: number = new Date().getFullYear()
 </script>
 
 <style scoped>
-  .footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  span {
     font-size: 14px;
-    padding: 10px;
     background-color: #defffe;
-  }
-  i {
-    padding: 0 5px;
   }
 </style>

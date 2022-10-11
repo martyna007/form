@@ -1,12 +1,12 @@
 <template>
-  <n-card :bordered="false" style="max-width: 600px;box-shadow: 0 0 14px rgb(0 0 0 / 20%);margin: 0 auto;">
+  <n-card :bordered="false" class="mx-auto my-0 shadow">
     <template v-if="isUserData">
-      <n-h2 style="margin: 0;text-align: center; color: #2bb1a8">Welcome {{ formValue.firstname }}!</n-h2>
-      <n-h3 style="margin: 0 0 30px 0;text-align: center; font-weight: 600; font-size: 18px;width: 100%">You can edit your data here</n-h3>
+      <n-h2 class="m-0 text-center text-primary">Welcome, {{ formValue.firstname }}!</n-h2>
+      <n-h3 class="mt-0 mb-4 text-center w-100 fw-semibold">You can edit your data here</n-h3>
     </template>
     <template v-else>
-      <n-h2 style="margin: 0;text-align: center; color: #2bb1a8">Welcome to ArcticForm!</n-h2>
-      <n-h3 style="margin: 0 0 30px 0;text-align: center; font-weight: 600; font-size: 18px;width: 100%">Please fill the form below</n-h3>
+      <n-h2 class="m-0 text-center text-primary">Welcome to ArcticForm!</n-h2>
+      <n-h3 className="mt-0 mb-4 text-center w-100 fw-semibold">Please fill the form below</n-h3>
     </template>
     <n-form
         ref="formRef"
@@ -27,7 +27,7 @@
         </n-form-item-gi>
         <n-form-item-gi :span="12" label="Birthday" path="birthday">
           <n-date-picker v-model:value="formValue.birthday" v-model:formatted-value="formValue.birthdayFormatted" :actions="null" clearable placeholder="Date of birth"
-                         type="date" value-format="yyyy-MM-dd" width="100%"/>
+                         type="date" value-format="yyyy-MM-dd" class="w-100"/>
         </n-form-item-gi>
         <n-form-item-gi :span="12" label="Avatar" path="img">
           <n-upload
@@ -46,8 +46,8 @@
                    type="textarea"/>
         </n-form-item-gi>
         <n-gi :span="24">
-          <div style="display: flex; justify-content: center">
-            <n-button size="large" type="primary" @click="handleSubmit">
+          <div class="d-flex justify-content-center">
+            <n-button class="px-4" size="large" type="primary" @click="handleSubmit">
               {{ isUserData ? 'Edit' : 'Submit' }}
             </n-button>
           </div>
@@ -80,7 +80,7 @@ import {validateIsValue, validateFirstName, validateLastName, validateEmail, val
 import {UserData} from '../types'
 import {MessageApiInjection} from 'naive-ui/es/message/src/MessageProvider'
 import SessionStorageService from '../services/SessionStorageService'
-import {useRouter} from 'vue-router'
+import {Router, useRouter} from 'vue-router'
 
 const formRef = ref<FormInst | null>(null)
 let formValue = reactive<UserData>({
@@ -95,7 +95,7 @@ let formValue = reactive<UserData>({
 })
 const message: MessageApiInjection = useMessage()
 const acceptedImgFormats: string[] = ['image/png', 'image/jpg', 'image/jpeg']
-const router = useRouter()
+const router: Router = useRouter()
 const isUserData = ref<boolean>(false)
 const rules: FormRules = {
   firstname: [
@@ -131,11 +131,12 @@ const rules: FormRules = {
       message: 'Please input valid email',
       validator: validateEmail
     }],
-  phone: [{
-    required: false,
-    message: 'Please enter valid phone number',
-    validator: validatePhone
-  }],
+  phone: [
+    {
+      required: false,
+      message: 'Please enter valid phone number',
+      validator: validatePhone
+    }],
   birthday: [
     {
       required: true,
@@ -146,24 +147,46 @@ const rules: FormRules = {
       required: true,
       message: 'You must be at least 18 years old',
       validator: validateAge
-    }
-    ],
-    img: [{
+    }],
+  img: [
+    {
       required: false,
     }],
-    about: [{
+  about: [
+    {
       required: false
     }]
 }
 
+onMounted((): void => {
+  accessibilityFix()
+  const service: SessionStorageService = SessionStorageService.getInstance()
+  isUserData.value = service.isUserData()
+  if (isUserData) {
+    fillInputsWithUserData()
+  }
+})
+
+function fillInputsWithUserData(): void {
+  const serviceData: UserData = SessionStorageService.getInstance().getUserData()
+  formValue.firstname = serviceData.firstname
+  formValue.lastname = serviceData.lastname
+  formValue.email = serviceData.email
+  formValue.birthday = serviceData.birthday
+  formValue.birthdayFormatted = serviceData.birthdayFormatted
+  formValue.phone = serviceData.phone
+  formValue.about = serviceData.about
+  formValue.img = serviceData.img
+}
+
 function handleSubmit(e: MouseEvent): void {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate((errors): void => {
     if (!errors) {
       SessionStorageService.getInstance().saveUserData(formValue)
       message.success('Submission success')
       router.push({
-        name: 'Profile',
+        name: 'Profile'
       })
     } else {
       message.error('Please correct form')
@@ -171,23 +194,29 @@ function handleSubmit(e: MouseEvent): void {
   })
 }
 
-async function beforeUpload(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }): Promise<boolean> {
+function beforeUpload(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }): boolean {
   const fileSize: number | undefined = data.file.file?.size
-  if (!acceptedImgFormats.includes(data.file.file?.type as string)) {
+  const fileFormat: string = <string>data.file.file?.type
+  const isFileInWrongFormat: boolean = !acceptedImgFormats.includes(fileFormat)
+  const isFileTooBig: boolean = fileSize !== undefined && fileSize > 2000000
+
+  if (isFileInWrongFormat) {
     message.warning('Accepted formats: png, jpg and jpeg. Please re-upload.')
     return false
-  } else if (fileSize !== undefined && fileSize > 2000000) {
+  } else if (isFileTooBig) {
     message.warning('File too big. Please re-upload.')
     return false
   } else {
-    const url: string | ArrayBuffer | undefined | null = await readURL(data.file.file as Blob)
-
-    if (url !== null && url !== undefined) {
-      formValue.img = url.toString()
-    } else {
-      formValue.img = null
-    }
+    saveImgFile(data)
     return true
+  }
+}
+async function saveImgFile(data: { file: UploadFileInfo, fileList: UploadFileInfo[] }): Promise<void> {
+  const url: string | ArrayBuffer | undefined | null = await readURL(data.file.file as Blob)
+  if (url !== null && url !== undefined) {
+    formValue.img = url.toString()
+  } else {
+    formValue.img = null
   }
 }
 const readURL = (file: Blob): Promise<string | ArrayBuffer | undefined | null> => {
@@ -198,23 +227,8 @@ const readURL = (file: Blob): Promise<string | ArrayBuffer | undefined | null> =
     reader.readAsDataURL(file)
   })
 }
-onMounted(()=> {
-  accessibilityFix()
-  const service: SessionStorageService = SessionStorageService.getInstance()
-  isUserData.value = service.isUserData()
-  if (isUserData) {
-    const serviceData: UserData = service.getUserData()
-    formValue.firstname = serviceData.firstname
-    formValue.lastname = serviceData.lastname
-    formValue.email = serviceData.email
-    formValue.birthday = serviceData.birthday
-    formValue.birthdayFormatted = serviceData.birthdayFormatted
-    formValue.phone = serviceData.phone
-    formValue.about = serviceData.about
-    formValue.img = serviceData.img
-  }
-})
 
+// naive-ui does not set proper attributes
 function accessibilityFix(): void {
   const inputFileEl = document.querySelector('input[type="file"]')
   inputFileEl?.setAttribute('id', 'imgFile')
@@ -223,6 +237,9 @@ function accessibilityFix(): void {
 </script>
 
 <style>
+.n-card {
+  max-width: 600px;
+}
 .n-card > .n-card-header {
   padding-bottom: 0;
 }
@@ -237,16 +254,12 @@ function accessibilityFix(): void {
   margin-top: 0;
 }
 
-.n-date-picker {
-  width: 100%;
-}
-
 span.n-upload-file-info__thumbnail {
   line-height: 17px;
 }
 
 .small {
-  font-size: 12px;
+  font-size: 11px;
   margin: 0 10px;
   line-height: 1.2;
 }
